@@ -8,8 +8,11 @@ import collections
 import importlib
 import sys
 
+from dotenv import load_dotenv
 from google.adk.runners import InMemoryRunner
 from google.genai import types
+
+load_dotenv()  # read GOOGLE_CLOUD_PROJECT etc. from the repo-root .env, like adk web does
 
 
 async def run(pkg: str, rid: str, n: int) -> None:
