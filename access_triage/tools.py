@@ -97,37 +97,6 @@ def get_app_policy(app: str, role: str) -> dict:
     }
 
 
-def check_sod_conflicts(email: str, app: str, role: str) -> dict:
-    """Check separation-of-duties (SoD) rules for a requested role.
-
-    Compares the requested "app:role" with everything the person already holds.
-
-    Args:
-        email: The requester's work email address.
-        app: The application name.
-        role: The role being requested.
-
-    Returns:
-        A dict with "conflict" (true or false) and, when true, the list of
-        violated rules with rule_id, the entitlement already held, and the reason.
-    """
-    person = get_employee(email)
-    if person["status"] != "found":
-        return {"status": "not_found", "email": email}
-    requested = f"{app}:{role}"
-    held = set(person.get("current_access", []))
-    violations = []
-    for rule in _load("sod_rules.json"):
-        pair = {rule["role_a"], rule["role_b"]}
-        if requested in pair:
-            other = (pair - {requested}).pop()
-            if other in held:
-                violations.append(
-                    {"rule_id": rule["rule_id"], "already_holds": other, "reason": rule["reason"]}
-                )
-    return {"status": "checked", "requested": requested, "conflict": bool(violations), "violations": violations}
-
-
 def record_recommendation(request_id: str, recommendation: str, reasons: list[str]) -> dict:
     """Record the triage recommendation for a request so a human approver can act on it.
 

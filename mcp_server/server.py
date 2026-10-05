@@ -24,13 +24,16 @@ _spec.loader.exec_module(tools)
 
 mcp = FastMCP("cymbal-access")
 
-for fn in (
-    tools.get_access_request,
-    tools.get_employee,
-    tools.get_app_policy,
-    tools.check_sod_conflicts,
-    tools.record_recommendation,
+for name in (
+    "get_access_request",
+    "get_employee",
+    "get_app_policy",
+    "check_sod_conflicts",  # not on the live-start branch until you add it
+    "record_recommendation",
 ):
+    if not hasattr(tools, name):
+        continue
+    fn = getattr(tools, name)
     # FastMCP builds each tool's schema from the type hints and docstring,
     # the same way ADK does for function tools.
     mcp.tool()(fn)
