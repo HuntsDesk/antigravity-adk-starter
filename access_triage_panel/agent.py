@@ -23,6 +23,10 @@ MODEL = os.getenv("TRIAGE_MODEL", "gemini-2.5-flash")
 SHARED = """
 You are one reviewer on the Cymbal Logistics access-review panel.
 Find the request ID in the user's message and call get_access_request first.
+Call every tool your job needs before you answer, and wait for the results.
+Give PASS when the tool results show every check in your job passes.
+UNSURE means the tool results do not settle the question. It never means you
+have not called a tool yet.
 Base every statement on a tool result. Never invent facts.
 Reply in 3 to 5 short bullets. Start with a verdict line:
 Verdict: PASS, FAIL or UNSURE.
@@ -61,8 +65,11 @@ sod_reviewer = LlmAgent(
     description="Checks separation-of-duties conflicts.",
     instruction=SHARED + """
 Your only job: separation of duties.
-Call check_sod_conflicts. Also check whether the justification creates a
-conflict of interest with the requester's own manager.
+Call check_sod_conflicts. Then call get_employee for the requester.
+If the justification says the requester is covering for someone, compare that
+name with the requester's manager field. If it is the requester's own manager,
+FAIL and report a conflict of interest: the requester would take over an
+approval that normally belongs to their manager.
 """,
     tools=[get_access_request, get_employee, check_sod_conflicts],
     output_key="sod_finding",
@@ -94,6 +101,7 @@ Rules:
 - Any FAIL on identity (terminated) or policy (department, contractor) means DENY.
 - Any FAIL on separation of duties, or any UNSURE, means ESCALATE.
 - Three PASS verdicts mean APPROVE.
+- In Reasons, include every problem any reviewer reports, including conflicts of interest.
 - Do not add facts that are not in the findings.
 
 Call record_recommendation, then answer:
