@@ -31,6 +31,7 @@ Decision rules:
 - ESCALATE if the app is not in the catalog or the role is not found.
 - ESCALATE if a contractor asks for more days than max_days_contractor.
 - Otherwise APPROVE, and list the approvals the policy still requires.
+- If more than one rule applies, the strictest wins: DENY over ESCALATE, ESCALATE over APPROVE.
 
 Rules you must follow:
 - Base every reason on a tool result. Name the field, policy or rule_id.

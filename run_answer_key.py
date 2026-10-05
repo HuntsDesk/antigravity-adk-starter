@@ -1,4 +1,4 @@
-"""Run the five answer-key requests through an agent and print tool calls + answers.
+"""Run the six answer-key requests through an agent and print tool calls + answers.
 
 Usage (repo root, venv active, env vars set):
   python run_answer_key.py access_triage
@@ -8,8 +8,11 @@ import asyncio
 import importlib
 import sys
 
+from dotenv import load_dotenv
 from google.adk.runners import InMemoryRunner
 from google.genai import types
+
+load_dotenv()  # read GOOGLE_CLOUD_PROJECT etc. from the repo-root .env, like adk web does
 
 REQUESTS = ["REQ-1001", "REQ-1002", "REQ-1003", "REQ-1004", "REQ-1005", "REQ-1006"]
 
