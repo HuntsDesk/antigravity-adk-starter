@@ -1,0 +1,4 @@
+[
+  {"rule_id": "SOD-01", "role_a": "FreightLedger:payables-approver", "role_b": "FreightLedger:vendor-master-edit", "reason": "One person could create a fake vendor and approve payments to it."},
+  {"rule_id": "SOD-02", "role_a": "RouteMaster:prod-admin", "role_b": "RouteMaster:staging-deployer", "reason": "One person could push untested code to production without a second reviewer."}
+]

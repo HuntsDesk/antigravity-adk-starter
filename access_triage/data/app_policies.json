@@ -1,0 +1,28 @@
+{
+  "FreightLedger": {
+    "description": "Finance reporting and general ledger system.",
+    "sensitivity": "high",
+    "roles": {
+      "report-viewer": {"allowed_departments": ["Finance", "Operations"], "contractors_allowed": false, "max_days_contractor": null, "requires": ["manager_approval"]},
+      "payables-approver": {"allowed_departments": ["Finance"], "contractors_allowed": false, "max_days_contractor": null, "requires": ["manager_approval", "security_review"]},
+      "vendor-master-edit": {"allowed_departments": ["Finance"], "contractors_allowed": false, "max_days_contractor": null, "requires": ["manager_approval", "security_review"]}
+    }
+  },
+  "RouteMaster": {
+    "description": "Production dispatch and route optimization platform.",
+    "sensitivity": "critical",
+    "roles": {
+      "dispatcher": {"allowed_departments": ["Operations"], "contractors_allowed": true, "max_days_contractor": 90, "requires": ["manager_approval"]},
+      "prod-admin": {"allowed_departments": ["Engineering"], "contractors_allowed": false, "max_days_contractor": null, "requires": ["manager_approval", "security_review", "change_ticket"]},
+      "staging-deployer": {"allowed_departments": ["Engineering"], "contractors_allowed": true, "max_days_contractor": 30, "requires": ["manager_approval"]}
+    }
+  },
+  "DockView": {
+    "description": "Warehouse management system for dock scheduling and inventory.",
+    "sensitivity": "medium",
+    "roles": {
+      "wms-user": {"allowed_departments": ["Operations"], "contractors_allowed": true, "max_days_contractor": 90, "requires": ["manager_approval"]},
+      "wms-supervisor": {"allowed_departments": ["Operations"], "contractors_allowed": false, "max_days_contractor": null, "requires": ["manager_approval"]}
+    }
+  }
+}

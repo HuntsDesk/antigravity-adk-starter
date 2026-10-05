@@ -1,0 +1,157 @@
+{
+  "priya.nair@cymbal-logistics.example": {
+    "name": "Priya Nair",
+    "title": "Senior Financial Analyst",
+    "department": "Finance",
+    "employment_type": "employee",
+    "employment_status": "active",
+    "manager": "marcus.webb@cymbal-logistics.example",
+    "start_date": "2021-03-15",
+    "end_date": null,
+    "groups": [
+      "finance-all",
+      "reporting-viewers"
+    ],
+    "current_access": []
+  },
+  "dev.okafor@cymbal-logistics.example": {
+    "name": "Dev Okafor",
+    "title": "Platform Engineer (Contractor)",
+    "department": "Engineering",
+    "employment_type": "contractor",
+    "employment_status": "active",
+    "manager": "lena.fischer@cymbal-logistics.example",
+    "start_date": "2026-08-03",
+    "end_date": "2026-12-31",
+    "groups": [
+      "eng-contractors",
+      "staging-deployers"
+    ],
+    "current_access": [
+      "RouteMaster:staging-deployer"
+    ]
+  },
+  "tomas.reyes@cymbal-logistics.example": {
+    "name": "Tomas Reyes",
+    "title": "Accounts Payable Specialist",
+    "department": "Finance",
+    "employment_type": "employee",
+    "employment_status": "active",
+    "manager": "marcus.webb@cymbal-logistics.example",
+    "start_date": "2019-11-04",
+    "end_date": null,
+    "groups": [
+      "finance-all",
+      "ap-processors",
+      "vendor-master-editors"
+    ],
+    "current_access": [
+      "FreightLedger:vendor-master-edit"
+    ]
+  },
+  "hana.sato@cymbal-logistics.example": {
+    "name": "Hana Sato",
+    "title": "Dispatch Coordinator",
+    "department": "Operations",
+    "employment_type": "employee",
+    "employment_status": "terminated",
+    "manager": "ray.delgado@cymbal-logistics.example",
+    "start_date": "2022-06-01",
+    "end_date": "2026-09-18",
+    "groups": [
+      "ops-all",
+      "dispatch-users"
+    ],
+    "current_access": [
+      "RouteMaster:dispatcher"
+    ]
+  },
+  "omar.haddad@cymbal-logistics.example": {
+    "name": "Omar Haddad",
+    "title": "Warehouse Operations Lead",
+    "department": "Operations",
+    "employment_type": "employee",
+    "employment_status": "active",
+    "manager": "ray.delgado@cymbal-logistics.example",
+    "start_date": "2018-02-12",
+    "end_date": null,
+    "groups": [
+      "ops-all",
+      "wms-supervisors"
+    ],
+    "current_access": [
+      "DockView:wms-supervisor"
+    ]
+  },
+  "marcus.webb@cymbal-logistics.example": {
+    "name": "Marcus Webb",
+    "title": "Finance Director",
+    "department": "Finance",
+    "employment_type": "employee",
+    "employment_status": "active",
+    "manager": "cfo@cymbal-logistics.example",
+    "start_date": "2016-01-11",
+    "end_date": null,
+    "groups": [
+      "finance-all",
+      "finance-leadership"
+    ],
+    "current_access": [
+      "FreightLedger:payables-approver",
+      "FreightLedger:report-viewer"
+    ]
+  },
+  "lena.fischer@cymbal-logistics.example": {
+    "name": "Lena Fischer",
+    "title": "Engineering Manager",
+    "department": "Engineering",
+    "employment_type": "employee",
+    "employment_status": "active",
+    "manager": "cto@cymbal-logistics.example",
+    "start_date": "2020-05-18",
+    "end_date": null,
+    "groups": [
+      "eng-all",
+      "eng-managers",
+      "prod-admins"
+    ],
+    "current_access": [
+      "RouteMaster:prod-admin"
+    ]
+  },
+  "ray.delgado@cymbal-logistics.example": {
+    "name": "Ray Delgado",
+    "title": "VP Operations",
+    "department": "Operations",
+    "employment_type": "employee",
+    "employment_status": "active",
+    "manager": "coo@cymbal-logistics.example",
+    "start_date": "2015-09-08",
+    "end_date": null,
+    "groups": [
+      "ops-all",
+      "ops-leadership"
+    ],
+    "current_access": [
+      "DockView:wms-supervisor",
+      "RouteMaster:dispatcher"
+    ]
+  },
+  "nina.kowalski@cymbal-logistics.example": {
+    "name": "Nina Kowalski",
+    "title": "Accounts Payable Lead",
+    "department": "Finance",
+    "employment_type": "employee",
+    "employment_status": "active",
+    "manager": "marcus.webb@cymbal-logistics.example",
+    "start_date": "2019-04-15",
+    "end_date": null,
+    "groups": [
+      "finance-all",
+      "ap-team"
+    ],
+    "current_access": [
+      "FreightLedger:payables-approver"
+    ]
+  }
+}
