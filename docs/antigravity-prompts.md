@@ -41,8 +41,10 @@ Do not change any other folder.
 
 ## Draw the architecture (for your demo-day slide)
 
+An example result is in [architecture.md](architecture.md).
+
 ```
-Read this repo and create a Mermaid diagram of the architecture: each agent, its tools, the MCP server, the policy guard, and Agent Runtime and Gemini Enterprise as the deployment targets. Save it as docs/architecture.md.
+Read this repo and create a Mermaid diagram of the architecture: each agent, its tools, the MCP server, the policy guard, and Agent Runtime and Gemini Enterprise as the deployment targets. Use current product names: Agent Runtime is part of Gemini Enterprise Agent Platform, not Vertex AI Agent Engine. Save it as docs/my-architecture.md.
 ```
 
 With the CLI, you can also try an open-source diagram tool such as Archify (https://github.com/tt-a1i/archify). Review any third-party tool before you install it.
