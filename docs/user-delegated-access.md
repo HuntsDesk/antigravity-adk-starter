@@ -10,7 +10,7 @@ User-delegated access means the agent calls the API **as the person using it**. 
 
 1. **Create an OAuth client** for the API you want to call. Add this redirect URI:
    `https://vertexaisearch.cloud.google.com/static/oauth/oauth.html`
-2. **Register the agent in Gemini Enterprise** (Agents > Add agent > Custom agent via Agent Runtime). On the **Authorizations** step, click **Add authorization** and enter the client ID, client secret, authorization URI and token URI.
+2. **Register the agent in Gemini Enterprise** (Agents > Add agent > Custom agent via Agent Runtime). On the **Authorizations** step, click **Add authorization** and fill in **Authorization name**, **Client ID**, **Client secret**, **Token URI** and **Authorization URI**. Tick **PKCE verification enabled** if your OAuth provider supports it. The authorization name cannot be changed later, and your code uses it to find the token.
 3. **Users sign in once.** The first time someone uses the agent, Gemini Enterprise asks them to authorize it.
 4. **The agent reads the token from session state** and calls the API with it.
 
@@ -22,7 +22,7 @@ This pattern follows Google's codelab [Integrate Gemini Enterprise Agents with G
 import re
 from google.adk.tools.tool_context import ToolContext
 
-AUTH_NAME = "my-authorization"   # the name you gave the authorization
+AUTH_NAME = "my-authorization"   # the Authorization name you entered in Gemini Enterprise
 
 
 def _user_token(tool_context: ToolContext) -> str | None:
