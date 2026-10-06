@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Deploy access_triage to Agent Runtime (Gemini Enterprise Agent Platform).
+# --otel_to_cloud turns on tracing, so the console's Traces tab shows each tool call.
 #
 # First deployment:
 #   PROJECT_ID=your-project-id ./deploy.sh
@@ -18,5 +19,6 @@ adk deploy agent_engine \
   --project="$PROJECT_ID" \
   --region="$REGION" \
   --display_name="Cymbal Access Triage" \
+  --otel_to_cloud \
   ${EXTRA[@]+"${EXTRA[@]}"} \
   access_triage
