@@ -63,7 +63,7 @@ python repeat_check.py access_triage REQ-1006 5
 
 Antigravity is Google's agentic development platform. You can reach it several ways: **Antigravity 2.0** (the desktop agent manager), the **Antigravity CLI** (`agy`), and the **Antigravity extension** for editors such as VS Code and JetBrains. Through Gemini Enterprise, your organization can run it under Google Cloud's enterprise controls.
 
-Prompts that work well on this repo are in [docs/antigravity-prompts.md](docs/antigravity-prompts.md): adding a tool, explaining the project, building your own agent from a short spec, and drawing an architecture diagram.
+Prompts that work well on this repo are in [docs/antigravity-prompts.md](docs/antigravity-prompts.md): adding a tool, explaining the project, building your own agent from a short spec, and drawing an architecture diagram. The architecture diagram the CLI drew for this repo is in [docs/architecture.md](docs/architecture.md).
 
 To practice, switch to the `live-start` branch. It is the same project without `check_sod_conflicts`, so the agent approves REQ-1003 when it should escalate. Use the add-a-tool prompt to fix it. The panel agent needs that tool, so it does not load on this branch until you add it.
 
