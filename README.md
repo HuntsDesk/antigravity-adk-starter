@@ -78,7 +78,7 @@ export PROJECT_ID=your-project-id
 ./deploy.sh
 ```
 
-Deployment takes several minutes. It prints a resource name that ends in `reasoningEngines/` and a number. Test it in the Google Cloud console: **Agent Platform > Deployments**, open the agent, then **Playground**.
+Deployment takes several minutes. It prints a resource name that ends in `reasoningEngines/` and a number. To redeploy changes, update that deployment instead of creating a second one with the same name: `AGENT_ENGINE_ID=<that number> ./deploy.sh`. Test it in the Google Cloud console: **Agent Platform > Deployments**, open the agent, then **Playground**.
 
 Only `access_triage/` is deployed. It is self-contained. The MCP version uses a local stdio server, which does not exist in a deployed agent; for production, host the MCP server separately and connect with `StreamableHTTPConnectionParams`.
 
