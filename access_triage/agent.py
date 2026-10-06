@@ -1,9 +1,30 @@
-"""Cymbal Logistics access-request triage agent (single agent, four function tools on this branch)."""
+"""Cymbal Logistics access-request triage agent (single agent, four function tools on this branch).
+
+HOW AN ADK AGENT IS PUT TOGETHER
+    An agent is three things:
+      1. A model     - the LLM that reads the request and decides what to do.
+      2. Instructions - plain-English text: the job, the steps, the rules and
+                        the answer format. The model reads it on every turn.
+      3. Tools       - Python functions the model may ask ADK to run
+                        (see access_triage/tools.py).
+    adk web and adk run look for a variable named root_agent in this file.
+
+HOW A REQUEST FLOWS
+    You type "Triage access request REQ-1003."
+    -> The model reads the instructions and the tool descriptions.
+    -> It asks for get_access_request("REQ-1003"). ADK runs the function and
+       sends the result back to the model.
+    -> It repeats that for each tool it needs, then decides.
+    -> It calls record_recommendation and writes the answer.
+    In adk web, every one of those steps is an event you can click.
+"""
 
 import os
 
+# Agent is ADK's standard model-driven agent (the same class as LlmAgent).
 from google.adk.agents import Agent
 
+# The tool functions. The leading dot means "from this same folder".
 from .tools import (
     get_access_request,
     get_app_policy,
@@ -11,8 +32,17 @@ from .tools import (
     record_recommendation,
 )
 
+# --- 1. The model ----------------------------------------------------------
+# Read the model name from the TRIAGE_MODEL environment variable, and use
+# gemini-2.5-flash if it is not set. Change the model without changing code.
 MODEL = os.getenv("TRIAGE_MODEL", "gemini-2.5-flash")
 
+# --- 2. The instructions ---------------------------------------------------
+# Everything between the triple quotes is sent to the model as-is.
+# It has four parts: the role, the steps (which tools to call, in order), the
+# decision rules, and the answer format.
+# Note: these rules are a request to the model, not a control. Play 4 shows
+# the same rules written in code (access_triage/policy.py).
 INSTRUCTION = """
 You are the access-request triage assistant for Cymbal Logistics.
 You review access requests and recommend APPROVE, DENY or ESCALATE.
@@ -47,6 +77,11 @@ Required next steps: who must act, and what they must do
 Confirmation: the confirmation_id from record_recommendation
 """
 
+# --- 3. The tools ----------------------------------------------------------
+# The list of functions the model is allowed to call. A function that exists
+# in tools.py but is not in this list is invisible to the model.
+# Other agents in this repo import this list, so they share the same tools.
+# Play 3 adds check_sod_conflicts to this list.
 TOOLS = [
     get_access_request,
     get_employee,
@@ -54,9 +89,13 @@ TOOLS = [
     record_recommendation,
 ]
 
+# --- The agent itself ------------------------------------------------------
 root_agent = Agent(
+    # The name shown in the adk web agent list. Letters, numbers and _ only.
     name="access_triage",
     model=MODEL,
+    # A one-line summary. Other agents read it when they decide whether to hand
+    # work to this agent, so write it for a reader, not a filing system.
     description="Reviews Cymbal Logistics access requests against policy and recommends approve, deny or escalate.",
     instruction=INSTRUCTION,
     tools=TOOLS,

@@ -4,10 +4,37 @@ then a decider merges their findings. Uses the tools and data in access_triage (
 Pattern: SequentialAgent[ ParallelAgent[policy, identity, sod], decider ]
 Each reviewer writes its finding to session state (output_key). The decider
 reads those keys through {placeholders} in its instruction.
+
+THE SHAPE, AS A PICTURE
+    access_review_panel (SequentialAgent: runs its steps in order)
+     |
+     +-- 1. review_panel (ParallelAgent: runs all three at the same time)
+     |        +-- policy_reviewer    -> saves its finding as "policy_finding"
+     |        +-- identity_reviewer  -> saves its finding as "identity_finding"
+     |        +-- sod_reviewer       -> saves its finding as "sod_finding"
+     |
+     +-- 2. decider (reads the three findings, decides, records)
+
+TWO KINDS OF AGENT
+    LlmAgent is a model-led agent: a model reads instructions and decides what
+    to do next. SequentialAgent and ParallelAgent are workflow agents: plain
+    code, no model. They always run every sub-agent, in a fixed order or all
+    at once. Use a workflow agent when every step must run every time.
+
+SESSION STATE
+    A shared notepad for one conversation. output_key="policy_finding" means
+    "save this agent's final answer in state under the name policy_finding".
+    {policy_finding} in the decider's instruction means "paste that saved
+    answer here before the model reads it". In adk web, click State to see it.
+
+NOTE
+    This file imports check_sod_conflicts. On the live-start branch that tool
+    only exists after Play 3, so this agent loads after Play 3, not before.
 """
 
 import os
 
+# LlmAgent is the same class as Agent: a model-led agent.
 from google.adk.agents import LlmAgent, ParallelAgent, SequentialAgent
 
 from access_triage.tools import (
@@ -20,6 +47,7 @@ from access_triage.tools import (
 
 MODEL = os.getenv("TRIAGE_MODEL", "gemini-2.5-flash")
 
+# Instructions every reviewer shares. Each reviewer adds its own job below.
 SHARED = """
 You are one reviewer on the Cymbal Logistics access-review panel.
 Find the request ID in the user's message and call get_access_request first.
@@ -32,6 +60,9 @@ Reply in 3 to 5 short bullets. Start with a verdict line:
 Verdict: PASS, FAIL or UNSURE.
 """
 
+# --- Reviewer 1: policy fit ------------------------------------------------
+# Gets only the tools its job needs. A narrow job and few tools make a
+# reviewer more reliable.
 policy_reviewer = LlmAgent(
     name="policy_reviewer",
     model=MODEL,
@@ -42,9 +73,11 @@ Call get_employee and get_app_policy. Check department, contractor rules,
 contractor day limits, and which approvals the role requires.
 """,
     tools=[get_access_request, get_employee, get_app_policy],
+    # Save the final answer in session state as "policy_finding".
     output_key="policy_finding",
 )
 
+# --- Reviewer 2: identity risk ---------------------------------------------
 identity_reviewer = LlmAgent(
     name="identity_reviewer",
     model=MODEL,
@@ -59,6 +92,9 @@ terminated person still holds.
     output_key="identity_finding",
 )
 
+# --- Reviewer 3: separation of duties --------------------------------------
+# Also checks for a conflict of interest: REQ-1003 says Tomas is covering for
+# Marcus, and Marcus is Tomas's own manager. The single agent misses this.
 sod_reviewer = LlmAgent(
     name="sod_reviewer",
     model=MODEL,
@@ -75,12 +111,20 @@ approval that normally belongs to their manager.
     output_key="sod_finding",
 )
 
+# --- Step 1: run the three reviewers at the same time ----------------------
+# ParallelAgent has no model. It starts every sub-agent at once and waits for
+# all of them. None of them can be skipped.
 review_panel = ParallelAgent(
     name="review_panel",
     sub_agents=[policy_reviewer, identity_reviewer, sod_reviewer],
     description="Runs the three reviews at the same time.",
 )
 
+# --- Step 2: the decider ---------------------------------------------------
+# Before the model reads this instruction, ADK replaces {policy_finding},
+# {identity_finding} and {sod_finding} with the answers saved in state.
+# The decider has one tool: it can record a decision, but it cannot look
+# anything up. It must work from the findings.
 decider = LlmAgent(
     name="decider",
     model=MODEL,
@@ -113,6 +157,9 @@ Confirmation: the confirmation_id
     tools=[record_recommendation],
 )
 
+# --- The whole panel -------------------------------------------------------
+# SequentialAgent has no model either. It runs review_panel, then decider,
+# always in that order. adk web looks for root_agent.
 root_agent = SequentialAgent(
     name="access_review_panel",
     sub_agents=[review_panel, decider],
