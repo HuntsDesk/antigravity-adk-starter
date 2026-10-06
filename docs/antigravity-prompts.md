@@ -39,6 +39,11 @@ Write a clear docstring for every tool. Add a tests/test_[my_agent].py that chec
 Do not change any other folder.
 ```
 
+Two lessons from testing this prompt:
+
+- A model does not know today's date. If your agent compares dates (end dates, deadlines, expiry), list a tool such as get_today() -> today's date in the spec. Without it, the agent guessed that a past date was in the future.
+- When the agent finishes, click **Accept all**, then **File > Save All** before you run the new agent. New files can stay unsaved in the editor, and the agent then reads empty files.
+
 ## Draw the architecture (for your demo-day slide)
 
 An example result is in [architecture.md](architecture.md).
